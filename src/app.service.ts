@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ConflictException, Injectable } from "@nestjs/common";
 import path from "path";
 import { UserDTO } from "./app.dto";
 import { promises as fs } from "fs";
@@ -14,9 +14,13 @@ export class AppService {
 
   async createUser(user: UserDTO) {
     let users = await this.readUsers();
-    const existingUserIndex = users.findIndex((u) => u.phone === user.phone);
+    const existingUserIndex = users.findIndex(
+      (u) => u.phone === user.phone || u.email === user.email,
+    );
     if (existingUserIndex !== -1) {
-      users[existingUserIndex] = user;
+      throw new ConflictException(
+        `User with same email or phone number already exists`,
+      );
     } else {
       users.push(user);
     }
