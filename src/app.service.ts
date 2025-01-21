@@ -33,7 +33,7 @@ export class AppService {
           "Phone number must be a valid nigeria phone number",
         );
       const existingUserIndex = users.findIndex(
-        (u) => u.phone === user.phone || u.email === user.email,
+        (u) => u.phone === phoneNumber || u.email === user.email || u.phone === `0${phoneNumber.substring(4)}`,
       );
       if (existingUserIndex !== -1) {
         throw new ConflictException(

@@ -26,7 +26,7 @@ let AppService = class AppService {
             const { isValid, phoneNumber } = (0, phone_1.default)(user.phone, { country: "NG" });
             if (!isValid)
                 throw new common_1.BadRequestException("Phone number must be a valid nigeria phone number");
-            const existingUserIndex = users.findIndex((u) => u.phone === user.phone || u.email === user.email);
+            const existingUserIndex = users.findIndex((u) => u.phone === phoneNumber || u.email === user.email || u.phone === `0${phoneNumber.substring(4)}`);
             if (existingUserIndex !== -1) {
                 throw new common_1.ConflictException(`User with same email or phone number already exists`);
             }
