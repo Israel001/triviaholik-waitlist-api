@@ -13,15 +13,25 @@ exports.AppService = void 0;
 const common_1 = require("@nestjs/common");
 const path_1 = __importDefault(require("path"));
 const fs_1 = require("fs");
+const phone_1 = __importDefault(require("phone"));
 let AppService = class AppService {
     dataFilePath = path_1.default.join(__dirname, "..", "public", "users.json");
     async createUser(user) {
         let users = await this.readUsers();
-        const existingUserIndex = users.findIndex((u) => u.phone === user.phone);
+        const existingUserIndex = users.findIndex((u) => u.phone === user.phone || u.email === user.email);
         if (existingUserIndex !== -1) {
-            users[existingUserIndex] = user;
+            throw new common_1.ConflictException(`User with same email or phone number already exists`);
         }
         else {
+            const { isValid, phoneNumber } = (0, phone_1.default)(user.phone, { country: "NG" });
+            console.log("phoneNumber", phoneNumber);
+            if (!isValid)
+                throw new common_1.BadRequestException("Phone number must be a valid nigeria phone number");
+            const existingUserIndex = users.findIndex((u) => u.phone === phoneNumber || u.email === user.email);
+            if (existingUserIndex !== -1) {
+                throw new common_1.ConflictException(`User with same email or phone number already exists`);
+            }
+            user.phone = phoneNumber;
             users.push(user);
         }
         await this.writeUsers(users);
