@@ -1,7 +1,12 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from "@nestjs/common";
 import path from "path";
 import { UserDTO } from "./app.dto";
 import { promises as fs } from "fs";
+import phone from "phone";
 
 @Injectable()
 export class AppService {
@@ -22,6 +27,12 @@ export class AppService {
         `User with same email or phone number already exists`,
       );
     } else {
+      const { isValid, phoneNumber } = phone(user.phone, { country: "NG" });
+      if (!isValid)
+        throw new BadRequestException(
+          "Phone number must be a valid nigeria phone number",
+        );
+      user.phone = phoneNumber;
       users.push(user);
     }
     await this.writeUsers(users);
