@@ -17,9 +17,9 @@ let AppService = class AppService {
     dataFilePath = path_1.default.join(__dirname, "..", "public", "users.json");
     async createUser(user) {
         let users = await this.readUsers();
-        const existingUserIndex = users.findIndex((u) => u.phone === user.phone);
+        const existingUserIndex = users.findIndex((u) => u.phone === user.phone || u.email === user.email);
         if (existingUserIndex !== -1) {
-            users[existingUserIndex] = user;
+            throw new common_1.ConflictException(`User with same email or phone number already exists`);
         }
         else {
             users.push(user);
