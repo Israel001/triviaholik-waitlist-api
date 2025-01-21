@@ -32,6 +32,14 @@ export class AppService {
         throw new BadRequestException(
           "Phone number must be a valid nigeria phone number",
         );
+      const existingUserIndex = users.findIndex(
+        (u) => u.phone === user.phone || u.email === user.email,
+      );
+      if (existingUserIndex !== -1) {
+        throw new ConflictException(
+          `User with same email or phone number already exists`,
+        );
+      }
       user.phone = phoneNumber;
       users.push(user);
     }
