@@ -7,4 +7,5 @@ export declare class AppController {
     createUser(user: UserDTO): Promise<{
         message: string;
     }>;
+    getTotalUsers(): Promise<number>;
 }

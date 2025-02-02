@@ -16,6 +16,9 @@ const fs_1 = require("fs");
 const phone_1 = __importDefault(require("phone"));
 let AppService = class AppService {
     dataFilePath = path_1.default.join(__dirname, "..", "public", "users.json");
+    async getTotalUsers() {
+        return (await this.readUsers()).length;
+    }
     async createUser(user) {
         let users = await this.readUsers();
         const existingUserIndex = users.findIndex((u) => u.phone === user.phone || u.email === user.email);
@@ -24,7 +27,6 @@ let AppService = class AppService {
         }
         else {
             const { isValid, phoneNumber } = (0, phone_1.default)(user.phone, { country: "NG" });
-            console.log("phoneNumber", phoneNumber);
             if (!isValid)
                 throw new common_1.BadRequestException("Phone number must be a valid nigeria phone number");
             const existingUserIndex = users.findIndex((u) => u.phone === phoneNumber || u.email === user.email);

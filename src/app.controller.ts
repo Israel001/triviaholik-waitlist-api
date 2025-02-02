@@ -16,4 +16,9 @@ export class AppController {
     await this.service.createUser(user);
     return { message: "User data saved successfully" };
   }
+
+  @Get('total-users')
+  async getTotalUsers() {
+    return this.service.getTotalUsers();
+  }
 }

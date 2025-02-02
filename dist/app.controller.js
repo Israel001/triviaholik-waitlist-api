@@ -29,6 +29,9 @@ let AppController = class AppController {
         await this.service.createUser(user);
         return { message: "User data saved successfully" };
     }
+    async getTotalUsers() {
+        return this.service.getTotalUsers();
+    }
 };
 exports.AppController = AppController;
 __decorate([
@@ -46,6 +49,13 @@ __decorate([
     __metadata("design:paramtypes", [app_dto_1.UserDTO]),
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "createUser", null);
+__decorate([
+    (0, common_1.Get)('total-users'),
+    openapi.ApiResponse({ status: 200, type: Number }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AppController.prototype, "getTotalUsers", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])

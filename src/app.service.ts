@@ -17,6 +17,10 @@ export class AppService {
     "users.json",
   );
 
+  async getTotalUsers() {
+    return (await this.readUsers()).length;
+  }
+
   async createUser(user: UserDTO) {
     let users = await this.readUsers();
     const existingUserIndex = users.findIndex(
